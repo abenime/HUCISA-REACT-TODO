@@ -1,0 +1,27 @@
+#root {
+  min-width: 50%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+ul{
+  list-style: none;
+  justify-items: center;
+}
+ul li{
+  border: 1px solid #464646 ;
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+  min-width: 100%;
+  font-size: 1.1em;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.text {
+  flex: 1;
+}
+.text::first-letter{
+  text-transform: uppercase;
+}
