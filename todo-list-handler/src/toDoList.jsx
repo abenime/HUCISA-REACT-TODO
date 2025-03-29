@@ -11,6 +11,7 @@ const Todo = () => {
   function deleteTask(index){
     const updatedTasks=todos.filter((_,i)=>i !==index);
     setTodos(updatedTasks)
+    localStorage.setItem('todos',JSON.stringify(updatedTasks))
   }
 
   const handleSubmit = (e) => {
