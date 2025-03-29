@@ -1,43 +1,54 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
-function ToDOList(){
-    const [tasks, setTasks] = useState([]);
-    const[newTask, setNewTask] = useState("");
+const Todo = () => {
+  const [todos, setTodos] = useState([]);
+  const [inputValue, setInputValue] = useState('');
 
-    function handleInputChange(event){
-        setNewTask(event.target.value);
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  function deleteTask(index){
+    const updatedTasks=todos.filter((_,i)=>i !==index);
+    setTodos(updatedTasks)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (inputValue.trim() !== '') {
+      setTodos([...todos, inputValue]);
+      setInputValue('');
+      localStorage.setItem('todos', JSON.stringify([...todos, inputValue]));
     }
-    function addTask(){
-        if(newTask.trim() !==""){
-            setTasks(t =>[...t,newTask]);
-            setNewTask("");
-        }
+  };
+  React.useEffect(() => {
+    const storedTodos = localStorage.getItem('todos');
+    if (storedTodos) {
+      setTodos(JSON.parse(storedTodos));
     }
-    function deleteTask(index){
+  }, []);
+  return (
+    <div>
+      <h1>Todo App</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          placeholder="Enter a new task"
+        />
+        <button type="submit">Add Task</button>
+      </form>
+      <ul>
+        {todos.map((todo, index) => (
+          <li key={index}>
+            <span className='text'>{todo}</span>
+            <button onClick={()=>deleteTask(index)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
-        const updatedTasks =tasks.filter((_,i)=> i !== index);
-        setTasks(updatedTasks)
-    }
-
-    return(
-        <>
-            <div className='todo'>
-        <div>
-          <h1>Todo List</h1>
-        </div>
-          <input type='text' placeholder='Input a todo list' value={newTask} onChange={handleInputChange}></input>
-          <button onClick={addTask}>+ Add </button>
-        <ul>
-          {tasks.map((task, index) =>
-            <li key={index}>
-                <span className='text'>{task}</span>
-                <button className='delete-button' onClick={()=>deleteTask(index)}>Delete</button>
-            </li>
-        )}
-        </ul>
-      </div>
-        </>
-    );
-}
-
-export default ToDOList
+export default Todo;
