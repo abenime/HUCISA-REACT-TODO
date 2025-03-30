@@ -43,6 +43,8 @@ const Todo = () => {
       <ul>
         {todos.map((todo, index) => (
           <li key={index}>
+            
+            <a>{index+1}</a>
             <span className='text'>{todo}</span>
             <button onClick={()=>deleteTask(index)}>Delete</button>
           </li>
