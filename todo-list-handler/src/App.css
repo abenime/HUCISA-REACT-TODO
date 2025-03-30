@@ -26,6 +26,8 @@ ul li{
   flex: 1;
   overflow-wrap:anywhere;
   padding: 5px;
+
+
 }
 .text::first-letter{
   text-transform: uppercase;

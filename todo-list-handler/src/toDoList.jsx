@@ -1,38 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 
 const Todo = () => {
   const [todos, setTodos] = useState([]);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
 
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
+  useEffect(() => {
+    const storedTodos = JSON.parse(localStorage.getItem("todos")) || [];
+    setTodos(storedTodos);
+  }, []);
+
+  const updateLocalStorage = (newTodos) => {
+    setTodos(newTodos);
+    localStorage.setItem("todos", JSON.stringify(newTodos));
   };
 
-  function deleteTask(index){
-    const updatedTasks=todos.filter((_,i)=>i !==index);
-    setTodos(updatedTasks)
-    localStorage.setItem('todos',JSON.stringify(updatedTasks))
-  }
+  const handleInputChange = (e) => setInputValue(e.target.value);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (inputValue.trim() !== '') {
-      setTodos([...todos, inputValue]);
-      setInputValue('');
-      localStorage.setItem('todos', JSON.stringify([...todos, inputValue]));
+    if (inputValue.trim()) {
+      updateLocalStorage([...todos, { text: inputValue, completed: false }]);
+      setInputValue("");
     }
   };
-  React.useEffect(() => {
-    const storedTodos = localStorage.getItem('todos');
-    if (storedTodos) {
-      setTodos(JSON.parse(storedTodos));
-    }
-  }, []);
+
+  const toggleComplete = (index) => {
+    const newTodos = todos.map((todo, i) =>
+      i === index ? { ...todo, completed: !todo.completed } : todo
+    );
+    updateLocalStorage(newTodos);
+  };
+
+  const deleteTask = (index) => {
+    updateLocalStorage(todos.filter((_, i) => i !== index));
+  };
+
   return (
     <div>
       <h1>Todo App</h1>
       <form onSubmit={handleSubmit}>
         <input
+          className="inpp"
           type="text"
           value={inputValue}
           onChange={handleInputChange}
@@ -43,10 +51,24 @@ const Todo = () => {
       <ul>
         {todos.map((todo, index) => (
           <li key={index}>
-            
-            <a>{index+1}</a>
-            <span className='text'>{todo}</span>
-            <button onClick={()=>deleteTask(index)}>Delete</button>
+            <input
+              className="chkbox"
+              type="checkbox"
+              checked={todo.completed}
+              onChange={() => toggleComplete(index)}
+            />
+            <a>{index + 1}</a>
+            <span
+              className="text"
+              style={{
+                textDecoration: todo.completed ? "line-through" : "none",
+                color: todo.completed ? "gray" : "white",
+                marginLeft: "8px"
+              }}
+            >
+               {todo.text}
+            </span>
+            <button onClick={() => deleteTask(index)} style={{ marginLeft: "10px" }}>Delete</button>
           </li>
         ))}
       </ul>

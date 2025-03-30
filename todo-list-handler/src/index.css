@@ -54,7 +54,13 @@ button:focus,
 button:focus-visible {
   outline: none;
 }
-input{
+
+input:focus,
+input:focus-visible{
+  outline: none;
+}
+
+.inpp{
   font-size: 1em;
   height: 2.4em;
   min-width: 60%;
@@ -64,9 +70,7 @@ input{
   background-color: #464646;
   border: #1a1a1a;
 }
-input:focus,
-input:focus-visible{
-  outline: none;
+input [type=checkbox]{
+  width: 40px;
+  height: 20px;
 }
-
-
